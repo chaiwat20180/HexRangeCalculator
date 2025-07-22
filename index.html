@@ -69,7 +69,11 @@
                             <input type="text" id="end-hex-range" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="DC-DA-4D-FF-FF-E9" required>
                         </div>
                     </div>
-                    <button id="calculate-range-btn" class="mt-6 w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">คำนวณ</button>
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-4 mt-6">
+                        <button id="calculate-range-btn" class="w-1/2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">คำนวณ</button>
+                        <button id="clear-range-btn" class="w-1/2 text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">ล้างข้อมูล</button>
+                    </div>
                     <div id="range-result" class="mt-6 p-4 bg-gray-900 rounded-lg text-center hidden">
                         <p class="text-gray-400">ระยะห่างคือ:</p>
                         <p id="range-result-value" class="text-2xl font-bold text-green-400 font-inter"></p>
@@ -88,7 +92,11 @@
                             <input type="number" id="count" min="1" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="80" required>
                         </div>
                     </div>
-                    <button id="calculate-end-val-btn" class="mt-6 w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">คำนวณ</button>
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-4 mt-6">
+                        <button id="calculate-end-val-btn" class="w-1/2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">คำนวณ</button>
+                        <button id="clear-end-val-btn" class="w-1/2 text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">ล้างข้อมูล</button>
+                    </div>
                     <div id="end-val-result" class="mt-6 p-4 bg-gray-900 rounded-lg text-center hidden">
                         <p class="text-gray-400">ค่าสิ้นสุดคือ:</p>
                         <p id="end-val-result-value" class="text-2xl font-bold text-green-400 font-inter"></p>
@@ -215,6 +223,21 @@ $(document).ready(function() {
 
         $('#end-val-result-value').text(formattedEndHex);
         $('#end-val-result').slideDown();
+    });
+    
+    // --- Clear Button Logic ---
+    $('#clear-range-btn').on('click', function() {
+        $('#start-hex-range').val('');
+        $('#end-hex-range').val('');
+        $('#range-result').slideUp();
+        hideError();
+    });
+
+    $('#clear-end-val-btn').on('click', function() {
+        $('#start-hex-end-val').val('');
+        $('#count').val('');
+        $('#end-val-result').slideUp();
+        hideError();
     });
 
     // Auto-format input fields based on selector
