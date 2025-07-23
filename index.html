@@ -1,26 +1,24 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เครื่องคำนวณ Hex Range</title>
+    <title data-lang="page_title">Hex Range Calculator</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts: Inter & Sarabun -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Use Sarabun for Thai text and Inter for English/numbers */
         body {
             font-family: 'Sarabun', 'Inter', sans-serif;
         }
         .font-inter {
             font-family: 'Inter', sans-serif;
         }
-        /* Custom styles for active tab */
         .tab-active {
             background-color: #1d4ed8; /* bg-blue-700 */
             color: white;
@@ -33,23 +31,30 @@
 <body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen p-4">
 
     <div class="w-full max-w-2xl mx-auto">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-blue-400">เครื่องคำนวณ Hex Range</h1>
-            <p class="text-gray-400 mt-2">สำหรับคำนวณ MAC Address หรือค่า Hexadecimal อื่นๆ</p>
-        </header>
+        <!-- Header with Language Switcher -->
+        <div class="relative text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-400" data-lang="main_title">Hex Range Calculator</h1>
+            <p class="text-gray-400 mt-2" data-lang="subtitle">For calculating MAC Addresses or other Hexadecimal values</p>
+            <div class="absolute top-0 right-0">
+                <select id="language-selector" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
+                    <option value="en">English</option>
+                    <option value="th">ไทย</option>
+                </select>
+            </div>
+        </div>
 
         <!-- Main Card -->
         <div class="bg-gray-800 rounded-xl shadow-2xl overflow-hidden">
             <!-- Tabs -->
             <div class="flex">
-                <button id="tab-range-btn" class="w-1/2 py-4 px-2 text-center font-semibold transition-colors duration-300 tab-active">คำนวณระยะห่าง (Range)</button>
-                <button id="tab-end-val-btn" class="w-1/2 py-4 px-2 text-center font-semibold transition-colors duration-300 tab-inactive">คำนวณค่าสิ้นสุด (End Value)</button>
+                <button id="tab-range-btn" class="w-1/2 py-4 px-2 text-center font-semibold transition-colors duration-300 tab-active" data-lang="tab_range">Calculate Range</button>
+                <button id="tab-end-val-btn" class="w-1/2 py-4 px-2 text-center font-semibold transition-colors duration-300 tab-inactive" data-lang="tab_end_val">Calculate End Value</button>
             </div>
 
             <div class="p-6 md:p-8">
                 <!-- Format Selector -->
                 <div class="mb-6">
-                    <label for="format-selector" class="block mb-2 text-sm font-medium text-gray-300">รูปแบบข้อมูล (Format)</label>
+                    <label for="format-selector" class="block mb-2 text-sm font-medium text-gray-300" data-lang="format_label">Data Format</label>
                     <select id="format-selector" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-inter">
                         <option value="xx-xx-xx-xx-xx-xx" selected>XX-XX-XX-XX-XX-XX</option>
                         <option value="xx:xx:xx:xx:xx:xx">XX:XX:XX:XX:XX:XX</option>
@@ -61,21 +66,20 @@
                 <div id="tab-range-content">
                     <div class="space-y-4">
                         <div>
-                            <label for="start-hex-range" class="block mb-2 text-sm font-medium text-gray-300">ค่าเริ่มต้น (Start)</label>
-                            <input type="text" id="start-hex-range" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="DC-DA-4D-FF-FF-9A" required>
+                            <label for="start-hex-range" class="block mb-2 text-sm font-medium text-gray-300" data-lang="start_label">Start Value</label>
+                            <input type="text" id="start-hex-range" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="00-00-00-00-00-00" required>
                         </div>
                         <div>
-                            <label for="end-hex-range" class="block mb-2 text-sm font-medium text-gray-300">ค่าสิ้นสุด (End)</label>
-                            <input type="text" id="end-hex-range" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="DC-DA-4D-FF-FF-E9" required>
+                            <label for="end-hex-range" class="block mb-2 text-sm font-medium text-gray-300" data-lang="end_label">End Value</label>
+                            <input type="text" id="end-hex-range" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="00-00-00-00-00-4F" required>
                         </div>
                     </div>
-                    <!-- Action Buttons -->
                     <div class="flex space-x-4 mt-6">
-                        <button id="calculate-range-btn" class="w-1/2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">คำนวณ</button>
-                        <button id="clear-range-btn" class="w-1/2 text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">ล้างข้อมูล</button>
+                        <button id="calculate-range-btn" class="w-1/2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300" data-lang="calculate_button">Calculate</button>
+                        <button class="clear-all-btn w-1/2 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300" data-lang="clear_button">Clear All</button>
                     </div>
                     <div id="range-result" class="mt-6 p-4 bg-gray-900 rounded-lg text-center hidden">
-                        <p class="text-gray-400">ระยะห่างคือ:</p>
+                        <p class="text-gray-400" data-lang="result_range_label">The range is:</p>
                         <p id="range-result-value" class="text-2xl font-bold text-green-400 font-inter"></p>
                     </div>
                 </div>
@@ -84,48 +88,102 @@
                 <div id="tab-end-val-content" class="hidden">
                     <div class="space-y-4">
                         <div>
-                            <label for="start-hex-end-val" class="block mb-2 text-sm font-medium text-gray-300">ค่าเริ่มต้น (Start)</label>
-                            <input type="text" id="start-hex-end-val" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="DC-DA-4D-FF-FF-9A" required>
+                            <label for="start-hex-end-val" class="block mb-2 text-sm font-medium text-gray-300" data-lang="start_label">Start Value</label>
+                            <input type="text" id="start-hex-end-val" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="00-00-00-00-00-00" required>
                         </div>
                         <div>
-                            <label for="count" class="block mb-2 text-sm font-medium text-gray-300">จำนวนที่ต้องการ (Count)</label>
+                            <label for="count" class="block mb-2 text-sm font-medium text-gray-300" data-lang="count_label">Count</label>
                             <input type="number" id="count" min="1" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="80" required>
                         </div>
                     </div>
-                    <!-- Action Buttons -->
                     <div class="flex space-x-4 mt-6">
-                        <button id="calculate-end-val-btn" class="w-1/2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">คำนวณ</button>
-                        <button id="clear-end-val-btn" class="w-1/2 text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300">ล้างข้อมูล</button>
+                        <button id="calculate-end-val-btn" class="w-1/2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300" data-lang="calculate_button">Calculate</button>
+                        <button class="clear-all-btn w-1/2 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-3 text-center transition-colors duration-300" data-lang="clear_button">Clear All</button>
                     </div>
                     <div id="end-val-result" class="mt-6 p-4 bg-gray-900 rounded-lg text-center hidden">
-                        <p class="text-gray-400">ค่าสิ้นสุดคือ:</p>
+                        <p class="text-gray-400" data-lang="result_end_val_label">The end value is:</p>
                         <p id="end-val-result-value" class="text-2xl font-bold text-green-400 font-inter"></p>
                     </div>
                 </div>
                 
                 <!-- Error Message Area -->
                 <div id="error-message" class="mt-6 p-3 bg-red-900 border border-red-700 text-red-300 rounded-lg text-center hidden"></div>
-
             </div>
         </div>
     </div>
 
 <script>
 $(document).ready(function() {
-    // --- Helper Functions ---
+    // --- Language Data (i18n) ---
+    const translations = {
+        en: {
+            page_title: "Hex Range Calculator",
+            main_title: "Hex Range Calculator",
+            subtitle: "For calculating MAC Addresses or other Hexadecimal values",
+            tab_range: "Calculate Range",
+            tab_end_val: "Calculate End Value",
+            format_label: "Data Format",
+            start_label: "Start Value",
+            end_label: "End Value",
+            count_label: "Count",
+            calculate_button: "Calculate",
+            clear_button: "Clear All",
+            result_range_label: "The range is:",
+            result_end_val_label: "The end value is:",
+            error_invalid_hex: "Invalid Hex format. Please check the input (must be 12 hex characters).",
+            error_invalid_start_hex: "Invalid start Hex format (must be 12 hex characters).",
+            error_invalid_count: "Please enter a count (must be greater than 0).",
+            error_overflow: "The result exceeds the 12-character Hex limit."
+        },
+        th: {
+            page_title: "เครื่องคำนวณ Hex Range",
+            main_title: "เครื่องคำนวณ Hex Range",
+            subtitle: "สำหรับคำนวณ MAC Address หรือค่า Hexadecimal อื่นๆ",
+            tab_range: "คำนวณระยะห่าง (Range)",
+            tab_end_val: "คำนวณค่าสิ้นสุด (End Value)",
+            format_label: "รูปแบบข้อมูล (Format)",
+            start_label: "ค่าเริ่มต้น (Start)",
+            end_label: "ค่าสิ้นสุด (End)",
+            count_label: "จำนวนที่ต้องการ (Count)",
+            calculate_button: "คำนวณ",
+            clear_button: "ล้างข้อมูลทั้งหมด",
+            result_range_label: "ระยะห่างคือ:",
+            result_end_val_label: "ค่าสิ้นสุดคือ:",
+            error_invalid_hex: "รูปแบบ Hex ไม่ถูกต้อง กรุณาตรวจสอบค่าที่ป้อน (ต้องมี 12 ตัวอักษร Hex)",
+            error_invalid_start_hex: "รูปแบบ Hex เริ่มต้นไม่ถูกต้อง (ต้องมี 12 ตัวอักษร Hex)",
+            error_invalid_count: "กรุณาใส่จำนวนที่ต้องการ (ต้องมากกว่า 0)",
+            error_overflow: "ผลลัพธ์เกินขอบเขตของค่า Hex 12 ตัว"
+        }
+    };
 
-    // Removes separators (-, :) from a hex string
+    // Set default language to English
+    let currentLang = 'en';
+
+    function updateLanguage(lang) {
+        currentLang = lang;
+        $('[data-lang]').each(function() {
+            const key = $(this).data('lang');
+            if (translations[lang] && translations[lang][key]) {
+                $(this).text(translations[lang][key]);
+            }
+        });
+        document.title = translations[lang].page_title;
+    }
+
+    $('#language-selector').on('change', function() {
+        updateLanguage($(this).val());
+    });
+    
+    // --- Helper Functions ---
     function normalizeHex(hex) {
         return hex.replace(/[-:]/g, '').toUpperCase();
     }
 
-    // Checks if a string is a valid 12-character hex value
     function isValidHex(hex) {
         const normalized = normalizeHex(hex);
         return /^[0-9A-F]{12}$/.test(normalized);
     }
 
-    // Formats a clean hex string (12 chars) based on the selected format
     function formatHex(hex, format) {
         if (format === 'xxxxxxxxxxxx') {
             return hex;
@@ -134,15 +192,13 @@ $(document).ready(function() {
         return hex.match(/.{1,2}/g).join(separator);
     }
     
-    // Shows an error message
-    function showError(message) {
+    function showError(errorKey) {
+        const message = translations[currentLang][errorKey] || "An unknown error occurred.";
         $('#error-message').text(message).slideDown();
-        // Hide results
         $('#range-result').slideUp();
         $('#end-val-result').slideUp();
     }
     
-    // Hides the error message
     function hideError() {
         $('#error-message').slideUp();
     }
@@ -165,22 +221,20 @@ $(document).ready(function() {
     });
 
     // --- Calculation Logic ---
-
-    // 1. Calculate Range
-    $('#calculate-range-btn').on('click', function() {
+    // Using event delegation for calculate buttons for robustness
+    $('body').on('click', '#calculate-range-btn', function() {
         hideError();
         const startHex = $('#start-hex-range').val();
         const endHex = $('#end-hex-range').val();
 
         if (!isValidHex(startHex) || !isValidHex(endHex)) {
-            showError('รูปแบบ Hex ไม่ถูกต้อง กรุณาตรวจสอบค่าที่ป้อน (ต้องมี 12 ตัวอักษร Hex)');
+            showError('error_invalid_hex');
             return;
         }
 
         const startDec = BigInt('0x' + normalizeHex(startHex));
         const endDec = BigInt('0x' + normalizeHex(endHex));
         
-        // Calculate the absolute difference and add 1 to include both ends in the count
         const diff = (startDec > endDec) ? startDec - endDec : endDec - startDec;
         const count = diff + BigInt(1);
 
@@ -188,33 +242,28 @@ $(document).ready(function() {
         $('#range-result').slideDown();
     });
 
-    // 2. Calculate End Value
-    $('#calculate-end-val-btn').on('click', function() {
+    $('body').on('click', '#calculate-end-val-btn', function() {
         hideError();
         const startHex = $('#start-hex-end-val').val();
         const countStr = $('#count').val();
 
         if (!isValidHex(startHex)) {
-            showError('รูปแบบ Hex เริ่มต้นไม่ถูกต้อง (ต้องมี 12 ตัวอักษร Hex)');
+            showError('error_invalid_start_hex');
             return;
         }
         if (!countStr || parseInt(countStr) < 1) {
-            showError('กรุณาใส่จำนวนที่ต้องการ (ต้องมากกว่า 0)');
+            showError('error_invalid_count');
             return;
         }
 
         const startDec = BigInt('0x' + normalizeHex(startHex));
         const count = BigInt(countStr);
         
-        // Subtract 1 because the start value is the first in the count
         const endDec = startDec + count - BigInt(1);
-
-        // Convert back to hex, pad with leading zeros to ensure 12 characters
         let endHexResult = endDec.toString(16).toUpperCase().padStart(12, '0');
         
-        // Check for overflow (if the result is more than 12 hex chars)
         if (endHexResult.length > 12) {
-             showError('ผลลัพธ์เกินขอบเขตของค่า Hex 12 ตัว');
+             showError('error_overflow');
              return;
         }
 
@@ -225,22 +274,14 @@ $(document).ready(function() {
         $('#end-val-result').slideDown();
     });
     
-    // --- Clear Button Logic ---
-    $('#clear-range-btn').on('click', function() {
-        $('#start-hex-range').val('');
-        $('#end-hex-range').val('');
-        $('#range-result').slideUp();
+    // --- Global Clear Button Logic (using class selector) ---
+    $('body').on('click', '.clear-all-btn', function() {
+        $('#start-hex-range, #end-hex-range, #start-hex-end-val, #count').val('');
+        $('#range-result, #end-val-result').slideUp();
         hideError();
     });
 
-    $('#clear-end-val-btn').on('click', function() {
-        $('#start-hex-end-val').val('');
-        $('#count').val('');
-        $('#end-val-result').slideUp();
-        hideError();
-    });
-
-    // Auto-format input fields based on selector
+    // --- Auto-format input fields based on selector ---
     $('#format-selector').on('change', function() {
         const format = $(this).val();
         $('input[type="text"]').each(function() {
@@ -251,6 +292,9 @@ $(document).ready(function() {
             }
         });
     });
+
+    // --- Initialize with default language on page load ---
+    updateLanguage(currentLang);
 });
 </script>
 
