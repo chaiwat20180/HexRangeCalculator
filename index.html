@@ -27,6 +27,12 @@
         .tab-inactive {
             background-color: #374151; /* bg-gray-700 */
         }
+        .copyright {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.9rem;
+            color: #888;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen p-4">
@@ -68,11 +74,11 @@
                     <div class="space-y-4">
                         <div>
                             <label for="start-hex-range" class="block mb-2 text-sm font-medium text-gray-300" data-lang="start_label">Start Value</label>
-                            <input type="text" id="start-hex-range" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="FF-FF-FF-FF-FF-FF" required>
+                            <input type="text" id="start-hex-range" class="hex-input font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="FF-FF-FF-FF-FF-F0" required>
                         </div>
                         <div>
                             <label for="end-hex-range" class="block mb-2 text-sm font-medium text-gray-300" data-lang="end_label">End Value</label>
-                            <input type="text" id="end-hex-range" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="FF-FF-FF-FF-FF-FF" required>
+                            <input type="text" id="end-hex-range" class="hex-input font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="FF-FF-FF-FF-FF-FF" required>
                         </div>
                     </div>
                     <div class="flex space-x-4 mt-6">
@@ -90,11 +96,11 @@
                     <div class="space-y-4">
                         <div>
                             <label for="start-hex-end-val" class="block mb-2 text-sm font-medium text-gray-300" data-lang="start_label">Start Value</label>
-                            <input type="text" id="start-hex-end-val" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="FF-FF-FF-FF-FF-FF" required>
+                            <input type="text" id="start-hex-end-val" class="hex-input font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="FF-FF-FF-FF-FF-F0" required>
                         </div>
                         <div>
                             <label for="count" class="block mb-2 text-sm font-medium text-gray-300" data-lang="count_label">Count</label>
-                            <input type="number" id="count" min="1" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="80" required>
+                            <input type="number" id="count" min="1" class="font-inter bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="17" required>
                         </div>
                     </div>
                     <div class="flex space-x-4 mt-6">
@@ -111,11 +117,15 @@
                 <div id="error-message" class="mt-6 p-3 bg-red-900 border border-red-700 text-red-300 rounded-lg text-center hidden"></div>
             </div>
         </div>
+        <div class="copyright">
+                &copy; <span id="currentYear"></span> <a href="https://github.com/chaiwat20180" class="text-decoration-none text-blue-600">Chaiwat Kwanta</a> All rights reserved.
+        </div>
     </div>
 
 <script>
 $(document).ready(function() {
-   
+
+    $('#currentYear').text(`2024 - ${new Date().getFullYear()}`);
 
     // Set default language to English
     let currentLang = 'en';
@@ -226,6 +236,9 @@ $(document).ready(function() {
              showError('error_overflow');
              return;
         }
+        
+        // Store the raw hex result
+        $('#end-val-result').data('raw-hex', endHexResult);
 
         const format = $('#format-selector').val();
         const formattedEndHex = formatHex(endHexResult, format);
@@ -238,28 +251,55 @@ $(document).ready(function() {
     $('body').on('click', '.clear-all-btn', function() {
         $('#start-hex-range, #end-hex-range, #start-hex-end-val, #count').val('');
         $('#range-result, #end-val-result').slideUp();
+        // Clear stored raw hex data
+        $('#end-val-result').removeData('raw-hex');
         hideError();
     });
 
-    // --- Auto-format input fields and update placeholders based on selector ---
+    // --- Auto-format input fields and update placeholders/results based on selector ---
     $('#format-selector').on('change', function() {
         const format = $(this).val();
 
         // Update placeholders
-        const startPlaceholder = formatHex('FFFFFFFFFFFF', format);
+        const startPlaceholder = formatHex('FFFFFFFFFFF0', format);
         const endPlaceholder = formatHex('FFFFFFFFFFFF', format);
         $('#start-hex-range').attr('placeholder', startPlaceholder);
         $('#end-hex-range').attr('placeholder', endPlaceholder);
         $('#start-hex-end-val').attr('placeholder', startPlaceholder);
+        $('#count').attr('placeholder', '17');
 
-        // Re-format existing values
-        $('input[type="text"]').each(function() {
-            const currentVal = $(this).val();
-            if (isValidHex(currentVal)) {
+        // Re-format existing values in all hex inputs
+        $('.hex-input').each(function() {
+            const input = $(this);
+            const currentVal = input.val();
+            if (currentVal && isValidHex(currentVal)) {
                 const normalized = normalizeHex(currentVal);
-                $(this).val(formatHex(normalized, format));
+                input.val(formatHex(normalized, format));
             }
         });
+
+        // Re-format the visible end value result, if it exists
+        if ($('#end-val-result').is(':visible')) {
+            const rawHex = $('#end-val-result').data('raw-hex');
+            if (rawHex) {
+                const newFormattedHex = formatHex(rawHex, format);
+                $('#end-val-result-value').text(newFormattedHex);
+            }
+        }
+
+    }).trigger('change'); // Trigger once on load to set initial state
+
+    // --- Auto-format a single input field when its value changes (on blur) ---
+    $('body').on('change', '.hex-input', function() {
+        const input = $(this);
+        const currentValue = input.val();
+
+        if (currentValue && isValidHex(currentValue)) {
+            const format = $('#format-selector').val();
+            const normalized = normalizeHex(currentValue);
+            const formatted = formatHex(normalized, format);
+            input.val(formatted);
+        }
     });
 
     // --- Initialize with default language on page load ---
